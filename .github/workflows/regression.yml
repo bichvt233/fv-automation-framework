@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Full Tests
         run: |
-          pytest -n 4 --env=staging --alluredir=reports
+          pytest -n 4 --env=staging --alluredir=reports 
 
       - name: Upload Allure Results
         if: always()
