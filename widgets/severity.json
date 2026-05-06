@@ -1,0 +1,1 @@
+[{"uid":"96eaf83e72b44f33","name":"test_checkout_flow[chromium0]","time":{"start":1778060120012,"stop":1778060120815,"duration":803},"status":"passed","severity":"normal"},{"uid":"a55e074983b23288","name":"test_login_api","time":{"start":1778060119324,"stop":1778060119568,"duration":244},"status":"passed","severity":"normal"}]
