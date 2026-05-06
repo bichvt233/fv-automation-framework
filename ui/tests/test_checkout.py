@@ -8,13 +8,14 @@ from ui.tests.data.checkout_data import VALID_USER, CHECKOUT_INFO, EXPECTED_PROD
 
 @pytest.mark.smoke
 @pytest.mark.ui
-def test_checkout_flow(page):
+def test_checkout_flow(page, base_url):
     login = LoginPage(page)
     product = ProductsPage(page)
     cart = CartPage(page)
     checkout = CheckoutPage(page)
 
     # Step 1: Login
+    page.goto(base_url)
     username = VALID_USER["username"]
     password = VALID_USER["password"]
     login.login(username, password)
