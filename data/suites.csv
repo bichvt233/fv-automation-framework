@@ -1,3 +1,3 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","235","test_login_api","api.tests","2026-05-06","passed","2026-05-06","","test_login_api","",""
-"","943","test_checkout_flow[chromium0]","ui.tests","2026-05-06","passed","2026-05-06","","test_checkout","",""
+"","818","test_checkout_flow[chromium1]","ui.tests","2026-05-06","passed","2026-05-06","","test_checkout","",""
+"","343","test_login_api","api.tests","2026-05-06","passed","2026-05-06","","test_login_api","",""
