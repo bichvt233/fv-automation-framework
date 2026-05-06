@@ -35,3 +35,13 @@ jobs:
         with:
           name: allure-results
           path: reports/
+      - name: Generate Allure Report
+        if: always()
+        run: |
+          allure generate reports/ -o allure-report --clean
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
