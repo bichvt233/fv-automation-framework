@@ -1,4 +1,6 @@
 import pytest
+@pytest.mark.smoke
+@pytest.mark.ui
 from ui.pages.login_page import LoginPage
 from ui.pages.products_page import ProductsPage
 from ui.pages.cart_page import CartPage
