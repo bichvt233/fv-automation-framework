@@ -10,10 +10,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -21,25 +21,39 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install pytest-xdist allure-pytest
-          playwright install
+          python -m playwright install --with-deps
 
       - name: Run Smoke Tests
         run: |
-          pytest -m "smoke" -n 2 --env=staging
+          pytest -m "smoke" -n 2 --env=staging --browser chromium --alluredir=reports
 
       - name: Upload report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: reports/
+
+      - name: Install Allure CLI
+        if: always()
+        run: |
+          npm install -g allure-commandline
+
       - name: Generate Allure Report
         if: always()
         run: |
           allure generate reports/ -o allure-report --clean
+
       - name: Upload Allure Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report/
+      
+      - name: Deploy Allure Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
