@@ -3,8 +3,11 @@ class CheckoutPage:
         self.page = page
 
     def fill_info(self, first, last, zip_code):
+        self.page.locator("#first-name").wait_for()
         self.page.fill("#first-name", first)
+        self.page.locator("#last-name").wait_for()
         self.page.fill("#last-name", last)
+        self.page.locator("#postal-code").wait_for()
         self.page.fill("#postal-code", zip_code)
         self.page.click("#continue")
 

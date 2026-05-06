@@ -8,7 +8,7 @@ on:
 
 jobs:
   regression:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
 
     steps:
       - name: Checkout code
@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install pytest-xdist allure-pytest
-          playwright install
+          python -m playwright install --with-deps
 
       - name: Run Full Tests
         run: |
