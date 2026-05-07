@@ -60,28 +60,47 @@ CI/CD (GitHub Actions)
 ```text
 automation-framework/
 │
+├── .github/
+│   └── workflows/
+│       ├── pr-tests.yml        # Smoke tests on Pull Requests
+│       └── regression.yml      # Full regression on push to main + daily schedule
+│
 ├── config/
+│   └── staging.env             # Environment variables (BASE_URL, etc.)
+│
 ├── core/
+│   ├── base_page.py            # Base Page Object with common actions
+│   └── config.py               # Environment config loader
 │
 ├── ui/
 │   ├── pages/
+│   │   ├── login_page.py
+│   │   ├── products_page.py
+│   │   ├── cart_page.py
+│   │   └── checkout_page.py
 │   └── tests/
+│       ├── test_checkout.py
+│       └── data/
+│           └── checkout_data.py
 │
 ├── api/
 │   ├── services/
 │   └── tests/
+│       ├── test_login_api.py
+│       └── data/
+│           └── api_data.py
 │
-├── reports/
-│
-├── conftest.py
-├── pytest.ini
+├── conftest.py                 # Fixtures, hooks, Allure screenshot on failure
+├── pytest.ini                  # Pytest config & markers
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🧪 Example Test Flow (Checkout)
+## 🧪 Example Test Flows
+
+### UI — Checkout (E2E)
 
 * Login with standard user
 * Add product to cart
@@ -90,6 +109,11 @@ automation-framework/
 * Fill user information
 * Complete order
 * Verify success message
+
+### API — Login
+
+* Send POST request to login endpoint
+* Verify response status 200
 
 ---
 
@@ -123,15 +147,23 @@ pytest --alluredir=reports
 allure serve reports
 ```
 
+> Note: `allure-pytest` is required for report generation. Install via `pip install allure-pytest`.
+
 ---
 
-## 🔁 CI/CD
+## 🔁 CI/CD (GitHub Actions)
 
-The framework is designed to integrate with CI pipelines:
+The framework includes two GitHub Actions workflows in `.github/workflows/`:
 
-* Run smoke tests on Pull Requests
-* Run full regression on merge
-* Generate test reports automatically
+| Workflow | Trigger | Description |
+|----------|---------|-------------|
+| `pr-tests.yml` | Pull Request to `main` | Runs smoke tests (`-m smoke`) with parallel execution |
+| `regression.yml` | Push to `main` + Daily at 2AM UTC | Runs full regression suite with parallel execution |
+
+Both workflows:
+* Install dependencies + Playwright browsers
+* Run tests with `--env=staging --browser chromium`
+* Generate and upload Allure reports as artifacts
 
 ---
 
