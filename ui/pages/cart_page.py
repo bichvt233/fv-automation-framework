@@ -1,6 +1,8 @@
-class CartPage:
-    def __init__(self, page):
-        self.page = page
+from core.base_page import BasePage
+
+
+class CartPage(BasePage):
+    CHECKOUT_BUTTON = "#checkout"
 
     def checkout(self):
-        self.page.click("#checkout")
+        self.click(self.CHECKOUT_BUTTON)

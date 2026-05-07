@@ -1,9 +1,12 @@
-class ProductsPage:
-    def __init__(self, page):
-        self.page = page
+from core.base_page import BasePage
+
+
+class ProductsPage(BasePage):
+    ADD_TO_CART_BUTTON = ".inventory_item button"
+    CART_LINK = ".shopping_cart_link"
 
     def add_first_product_to_cart(self):
-        self.page.click(".inventory_item button")
+        self.click(self.ADD_TO_CART_BUTTON)
 
     def go_to_cart(self):
-        self.page.click(".shopping_cart_link")
+        self.click(self.CART_LINK)

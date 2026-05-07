@@ -73,12 +73,12 @@ automation-framework/
 │   └── config.py               # Environment config loader
 │
 ├── ui/
-│   ├── pages/
+│   ├── pages/                  ← MÔ TẢ cách tương tác với trang (HOW)
 │   │   ├── login_page.py
 │   │   ├── products_page.py
 │   │   ├── cart_page.py
 │   │   └── checkout_page.py
-│   └── tests/
+│   └── tests/                  ← MÔ TẢ kịch bản kiểm thử (WHAT)
 │       ├── test_checkout.py
 │       └── data/
 │           └── checkout_data.py
