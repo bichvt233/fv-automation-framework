@@ -16,7 +16,7 @@ Manual regression testing is:
 * Error-prone
 * Hard to scale across teams
 
-Especially for critical flows like **checkout**, where failures directly impact revenue.
+Especially for critical flows like **login** and **checkout**, where failures directly impact user experience and revenue.
 
 ---
 
@@ -25,6 +25,8 @@ Especially for critical flows like **checkout**, where failures directly impact 
 I designed and implemented a **modular automation framework** that:
 
 * Automates end-to-end checkout flow
+* Tests login with multiple user types (valid, locked, problem, performance, error, visual)
+* Tests API login endpoint
 * Uses Page Object Model for maintainability
 * Separates UI / API / Core layers
 * Supports environment-based configuration
@@ -62,58 +64,72 @@ automation-framework/
 │
 ├── .github/
 │   └── workflows/
-│       ├── pr-tests.yml        # Smoke tests on Pull Requests
-│       └── regression.yml      # Full regression on push to main + daily schedule
+│       ├── pr-tests.yml            # Smoke tests on Pull Requests
+│       └── regression.yml          # Full regression on push to main + daily schedule
 │
 ├── config/
-│   └── staging.env             # Environment variables (BASE_URL, etc.)
+│   └── staging.env                 # Environment variables (BASE_URL, etc.)
 │
 ├── core/
-│   ├── base_page.py            # Base Page Object with common actions
-│   └── config.py               # Environment config loader
+│   ├── base_page.py                # Base Page Object with common actions
+│   └── config.py                   # Environment config loader
 │
 ├── ui/
-│   ├── pages/                  ← MÔ TẢ cách tương tác với trang (HOW)
+│   ├── pages/                      ← Page Objects (HOW to interact)
 │   │   ├── login_page.py
 │   │   ├── products_page.py
 │   │   ├── cart_page.py
 │   │   └── checkout_page.py
-│   └── tests/                  ← MÔ TẢ kịch bản kiểm thử (WHAT)
-│       ├── test_checkout.py
+│   └── tests/                      ← Test scenarios (WHAT to verify)
+│       ├── test_login.py           # 6 login test cases (valid, locked, problem, perf, error, visual)
+│       ├── test_checkout.py        # E2E checkout flow
 │       └── data/
-│           └── checkout_data.py
+│           └── test_data.py        # Test data for UI tests
 │
 ├── api/
 │   ├── services/
 │   └── tests/
-│       ├── test_login_api.py
+│       ├── test_login_api.py       # API login test (reqres.in)
 │       └── data/
-│           └── api_data.py
+│           └── api_data.py         # Test data for API tests
 │
-├── conftest.py                 # Fixtures, hooks, Allure screenshot on failure
-├── pytest.ini                  # Pytest config & markers
+├── conftest.py                     # Fixtures, hooks, Allure screenshot on failure
+├── pytest.ini                      # Pytest config & markers (smoke, ui, api, regression)
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🧪 Example Test Flows
+## 🧪 Test Flows
+
+### UI — Login (6 Test Cases)
+
+| # | Test Case | User | Expected |
+|---|-----------|------|----------|
+| TC1 | Valid login | `standard_user` | Redirect to Products page |
+| TC2 | Locked out user | `locked_out_user` | Error message displayed |
+| TC3 | Problem user | `problem_user` | Login OK, product images may be broken |
+| TC4 | Performance glitch user | `performance_glitch_user` | Login OK but slow (>1s) |
+| TC5 | Error user | `error_user` | Login OK, some features may error |
+| TC6 | Visual user | `visual_user` | Login OK, UI may be misaligned |
 
 ### UI — Checkout (E2E)
 
 * Login with standard user
-* Add product to cart
+* Verify 6 products displayed
+* Add first product to cart
 * Navigate to cart
 * Proceed to checkout
 * Fill user information
 * Complete order
 * Verify success message
 
-### API — Login
+### API — Login (reqres.in)
 
-* Send POST request to login endpoint
+* Send POST request to `/api/login` with API key header
 * Verify response status 200
+* Verify token is returned and not empty
 
 ---
 
@@ -135,7 +151,22 @@ playwright install
 ## ▶️ Run Tests
 
 ```bash
-pytest -s -v --env=staging
+# Run all tests
+pytest --env=staging
+
+# Run only UI tests
+pytest -m ui --env=staging
+
+# Run only smoke tests
+pytest -m smoke --env=staging
+
+# Run only API tests
+pytest -m api --env=staging
+
+# Run a specific test file
+pytest ui/tests/test_login.py -v
+pytest ui/tests/test_checkout.py -v
+pytest api/tests/test_login_api.py -v
 ```
 
 ---
@@ -143,11 +174,11 @@ pytest -s -v --env=staging
 ## 📊 Test Report
 
 ```bash
-pytest --alluredir=reports
+pytest --alluredir=reports --env=staging
 allure serve reports
 ```
 
-> Note: `allure-pytest` is required for report generation. Install via `pip install allure-pytest`.
+> Note: `allure-pytest` is included in `requirements.txt`. Screenshots are automatically attached on test failure.
 
 ---
 
@@ -164,15 +195,32 @@ Both workflows:
 * Install dependencies + Playwright browsers
 * Run tests with `--env=staging --browser chromium`
 * Generate and upload Allure reports as artifacts
+* Deploy Allure report to GitHub Pages
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Python | 3.12 | Programming language |
+| Playwright | 1.55.0 | Browser automation |
+| Pytest | 8.4.1 | Test framework |
+| Allure | 2.16.0 | Test reporting |
+| Requests | 2.32.3 | API testing |
+| GitHub Actions | — | CI/CD |
 
 ---
 
 ## ⭐ Highlights
 
-* Scalable automation architecture
-* Clean separation of concerns
-* CI/CD-ready framework
-* Real-world E2E flow implementation
+* Scalable automation architecture with Page Object Model
+* Clean separation of concerns (UI / API / Core)
+* Multi-user login test coverage (6 user types)
+* E2E checkout flow with full verification
+* API test integration
+* CI/CD-ready with Allure reporting & GitHub Pages
+* Automatic screenshot capture on test failure
 
 ---
 
