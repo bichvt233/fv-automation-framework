@@ -8,4 +8,9 @@ def test_login_api():
         "email": VALID_API_USER["email"],
         "password": VALID_API_USER["password"]
     })
+    # Kiểm tra mã trạng thái trả về là 200 (thành công)
     assert res.status_code == 200
+    # Kiểm tra token trả về không rỗng và có độ dài hợp lệ
+    token = res.json().get("token")
+    assert token is not None
+    assert len(token) > 0
