@@ -1,6 +1,6 @@
-venv/
-__pycache__/
-*.pyc
-reports/
-allure-report/
-.env
+venv/ # Ignore virtual environment directory
+__pycache__/ # Ignore Python bytecode files
+*.pyc           # Ignore compiled Python files
+reports/ # Ignore test reports
+allure-report/ # Ignore Allure test reports
+.env # Ignore environment variables file

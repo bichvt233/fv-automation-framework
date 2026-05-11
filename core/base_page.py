@@ -1,14 +1,19 @@
 class BasePage:
-    def __init__(self, page):
+    # Nhận đối tượng page từ Playwright
+    def __init__(self, page): 
         self.page = page
 
-    def click(self, locator: str):
+    # locator là một chuỗi định danh cho phần tử trên trang (ví dụ: CSS selector, XPath, v.v.)
+    def click(self, locator: str): 
         self.page.locator(locator).wait_for()
         self.page.locator(locator).click()
 
-    def fill(self, locator: str, text: str):
+    # Điền văn bản vào một trường nhập liệu trên trang
+    def fill(self, locator: str, text: str): 
         self.page.locator(locator).wait_for()
         self.page.locator(locator).fill(text)
 
+    # Lấy văn bản từ một phần tử trên trang
     def get_text(self, locator: str) -> str:
-        return self.page.locator(locator).inner_text()
+        # Trả về văn bản bên trong phần tử được xác định bởi locator 
+        return self.page.locator(locator).inner_text() 

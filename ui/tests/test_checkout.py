@@ -4,7 +4,7 @@ from ui.pages.products_page import ProductsPage
 from ui.pages.cart_page import CartPage
 from ui.pages.checkout_page import CheckoutPage
 from playwright.sync_api import expect
-from ui.tests.data.checkout_data import VALID_USER, CHECKOUT_INFO, EXPECTED_PRODUCT_COUNT
+from ui.tests.data.test_data import VALID_USER, CHECKOUT_INFO, EXPECTED_PRODUCT_COUNT
 
 @pytest.mark.smoke
 @pytest.mark.ui
